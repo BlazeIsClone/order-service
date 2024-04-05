@@ -1,6 +1,7 @@
 package main
 
 import (
+	"database/sql"
 	"fmt"
 	"net/http"
 	"os"
@@ -27,6 +28,21 @@ func main() {
 	}
 
 	fmt.Println("server listening on port:", port)
+
+	db, err := sql.Open("mysql", "root:root_password@/db")
+
+	if err != nil {
+		panic(err)
+	}
+
+	defer db.Close()
+
+	insert, err := db.Query("INSERT INTO test VALUES ( 2, 'TEST' )")
+	if err != nil {
+		panic(err.Error())
+	}
+
+	defer insert.Close()
 
 	server.ListenAndServe()
 }
