@@ -1,5 +1,5 @@
 run:
-	go run main.go
+	go run cmd/main.go
 
 build:
-	go build -o app main.go
+	go build -o app cmd/main.go
