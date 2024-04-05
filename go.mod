@@ -1,3 +1,3 @@
-module github.com/blazeisclone/user-api-service
+module github.com/blazeisclone/order-service
 
 go 1.22.1

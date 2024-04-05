@@ -4,17 +4,17 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/blazeisclone/user-api-service/user"
+	"github.com/blazeisclone/order-service/order"
 )
 
 func handle(w http.ResponseWriter, r *http.Request) {
-	w.Write([]byte("Hello, from api..."))
+	w.Write([]byte("order service reached"))
 }
 
 func main() {
 	router := http.NewServeMux()
-	router.HandleFunc("/api/v1/", handle)
-	user.LoadUserRoutes(router)
+	router.HandleFunc("/", handle)
+	order.HandleRoutes(router)
 
 	server := http.Server{
 		Addr:    ":8080",
