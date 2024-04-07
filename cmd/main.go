@@ -1,12 +1,14 @@
 package main
 
 import (
+	"context"
 	"database/sql"
 	"fmt"
 	"net/http"
 	"os"
 
 	"github.com/blazeisclone/order-service/domain/product"
+	"github.com/go-sql-driver/mysql"
 )
 
 func handle(w http.ResponseWriter, r *http.Request) {
@@ -29,20 +31,37 @@ func main() {
 
 	fmt.Println("server listening on port:", port)
 
-	db, err := sql.Open("mysql", "root:root_password@/db")
-
-	if err != nil {
-		panic(err)
+	c := mysql.Config{
+		User:                 "root",
+		Passwd:               "password",
+		DBName:               "db",
+		Net:                  "tcp",
+		Addr:                 "127.0.0.1:3306",
+		AllowNativePasswords: true,
 	}
 
-	defer db.Close()
-
-	insert, err := db.Query("INSERT INTO test VALUES ( 2, 'TEST' )")
+	db, err := sql.Open("mysql", c.FormatDSN())
 	if err != nil {
-		panic(err.Error())
+		fmt.Println("sql.Open", err)
+		return
 	}
 
-	defer insert.Close()
+	defer func() {
+		_ = db.Close()
+		fmt.Println("db.Closed")
+	}()
+
+	if err := db.PingContext(context.Background()); err != nil {
+		fmt.Println("db.PingContext", err)
+		return
+	}
+
+	row := db.QueryRowContext(context.Background(), "select * from products")
+
+	if err := row.Err(); err != nil {
+		fmt.Println("db.QueryRowContext", err)
+		return
+	}
 
 	server.ListenAndServe()
 }

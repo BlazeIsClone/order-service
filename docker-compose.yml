@@ -7,7 +7,7 @@ services:
       - 3306:3306
     environment:
       MARIADB_DATABASE: db
-      MARIADB_ROOT_PASSWORD: root_password
+      MARIADB_ROOT_PASSWORD: password
     volumes:
       - mysql:/var/lib/mysql
 
