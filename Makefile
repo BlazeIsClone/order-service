@@ -1,5 +1,8 @@
 run:
-	go run cmd/main.go
+	bash scripts/run.sh
+
+test:
+	bash scripts/test.sh
 
 build:
-	go build -o app cmd/main.go
+	bash scripts/build.sh
