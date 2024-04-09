@@ -1,4 +1,4 @@
-package database
+package mysql
 
 import (
 	"database/sql"
@@ -38,7 +38,7 @@ func Init() (*sql.DB, error) {
 func Migrate(db *sql.DB, config *mysql.Config) (*migrate.Migrate, error) {
 	driver, _ := mysql.WithInstance(db, config)
 
-	return migrate.NewWithDatabaseInstance("file://migrations", "mysql", driver)
+	return migrate.NewWithDatabaseInstance("file://internal/database/mysql/migrations", "mysql", driver)
 }
 
 func Ping(db *sql.DB) error {

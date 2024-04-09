@@ -7,7 +7,7 @@ import (
 	"os"
 
 	"github.com/blazeisclone/order-service/domain/product"
-	"github.com/blazeisclone/order-service/internal/database"
+	mysqlDB "github.com/blazeisclone/order-service/internal/database/mysql"
 
 	"github.com/golang-migrate/migrate/v4/database/mysql"
 	_ "github.com/golang-migrate/migrate/v4/source/file"
@@ -32,7 +32,7 @@ func main() {
 
 	fmt.Println("server listening on port:", port)
 
-	db, err := database.Init()
+	db, err := mysqlDB.Init()
 	if err != nil {
 		fmt.Println("database init", err)
 	}
@@ -42,7 +42,7 @@ func main() {
 		fmt.Println("db.Closed")
 	}()
 
-	migrate, err := database.Migrate(db, &mysql.Config{})
+	migrate, err := mysqlDB.Migrate(db, &mysql.Config{})
 	if err != nil {
 		panic(error.Error(err))
 	}
