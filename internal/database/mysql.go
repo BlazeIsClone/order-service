@@ -4,12 +4,16 @@ import (
 	"database/sql"
 	"fmt"
 
+	"context"
+
 	driver "github.com/go-sql-driver/mysql"
 
+	"github.com/golang-migrate/migrate/v4"
+	"github.com/golang-migrate/migrate/v4/database/mysql"
 	_ "github.com/golang-migrate/migrate/v4/source/file"
 )
 
-func Connection() (*sql.DB, error) {
+func Init() (*sql.DB, error) {
 	cnf := driver.Config{
 		User:                 "root",
 		Passwd:               "password",
@@ -29,4 +33,14 @@ func Connection() (*sql.DB, error) {
 	}
 
 	return db, nil
+}
+
+func Migrate(db *sql.DB, config *mysql.Config) (*migrate.Migrate, error) {
+	driver, _ := mysql.WithInstance(db, config)
+
+	return migrate.NewWithDatabaseInstance("file://migrations", "mysql", driver)
+}
+
+func Ping(db *sql.DB) error {
+	return db.PingContext(context.Background())
 }

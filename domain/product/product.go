@@ -12,9 +12,8 @@ var (
 )
 
 type Product struct {
-	item     *domain.Item
-	price    float64
-	quantity int
+	item  *domain.Item
+	price float64
 }
 
 func NewProduct(name, description string, price float64) (Product, error) {
@@ -28,8 +27,7 @@ func NewProduct(name, description string, price float64) (Product, error) {
 			Name:        name,
 			Description: description,
 		},
-		price:    price,
-		quantity: 0,
+		price: price,
 	}, nil
 }
 

@@ -11,13 +11,17 @@ import (
 
 	"github.com/golang-migrate/migrate/v4/database/mysql"
 	_ "github.com/golang-migrate/migrate/v4/source/file"
+
+	"github.com/joho/godotenv"
 )
 
 func main() {
+	if err := godotenv.Load(); err != nil {
+		fmt.Println("Env vars not loaded from file")
+	}
+
 	router := http.NewServeMux()
 	product.Routes(router)
-
-	os.Setenv("PORT", "3000")
 
 	port := os.Getenv("PORT")
 
@@ -28,7 +32,7 @@ func main() {
 
 	fmt.Println("server listening on port:", port)
 
-	db, err := database.Connection()
+	db, err := database.Init()
 	if err != nil {
 		fmt.Println("database init", err)
 	}
